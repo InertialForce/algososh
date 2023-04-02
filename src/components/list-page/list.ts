@@ -9,7 +9,11 @@ export class Node<T> {
 
 interface ILinkedList<T> {
   append: (element: T) => void;
+  prepend: (element: T) => void;
+  deleteAt: (index: number) => void;
   insertAt: (element: T, position: number) => void;
+  deleteHead: (element: T) => void;
+  deleteTail: (element: T) => void;
   getSize: () => number;
   print: () => void;
 }
