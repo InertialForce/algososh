@@ -1,0 +1,24 @@
+.container {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+  margin: 0 auto;
+}
+
+.stack {
+  display: flex;
+  gap: 12px;
+}
+
+.input {
+  min-width: 377px;
+}
+
+.letters {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 52px 0 0;
+  padding: 0;
+  list-style: none;
+}
