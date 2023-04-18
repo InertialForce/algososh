@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
@@ -7,9 +7,10 @@ import { delay } from "../../utils/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 import styles from "./fibonacci-page.module.css";
+import { useForm } from "../../hooks/use-form";
 
 export const FibonacciPage: React.FC = () => {
-  const [inputValues, setInputValues] = useState("");
+  const { values, handleChange, setValues } = useForm({ number: "" });
   const [numbers, setNumbers] = useState<number[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -26,23 +27,24 @@ export const FibonacciPage: React.FC = () => {
     }
   };
 
+  console.log(values.number);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await getFibonacciNumbers(Number(inputValues));
+    await getFibonacciNumbers(Number(values.number));
     setLoading(false);
-    setInputValues("");
+    setValues({ number: "" });
   };
 
   return (
     <SolutionLayout title="Последовательность Фибоначчи">
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input
+          name={"number"}
           placeholder="Введите число от 1 до 19"
-          value={inputValues}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setInputValues(e.target.value)
-          }
+          value={values.number}
+          onChange={(e) => handleChange(e)}
           min={1}
           max={19}
           isLimitText
@@ -53,7 +55,7 @@ export const FibonacciPage: React.FC = () => {
           type="submit"
           text="Рассчитать"
           isLoader={loading}
-          disabled={!inputValues || Number(inputValues) >= 20}
+          disabled={!values.number || Number(values.number) >= 20}
         />
       </form>
 

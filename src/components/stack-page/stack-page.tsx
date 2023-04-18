@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Circle } from "../ui/circle/circle";
@@ -9,6 +9,7 @@ import { DELAY_IN_MS } from "../../constants/delays";
 import { ElementStates } from "../../types/element-states";
 
 import styles from "./stack-page.module.css";
+import { useForm } from "../../hooks/use-form";
 
 type TArrState = {
   value?: string;
@@ -19,7 +20,7 @@ type TArrState = {
 const stack = new Stack<string>();
 
 export const StackPage: React.FC = () => {
-  const [inputValues, setInputValues] = useState("");
+  const { values, handleChange, setValues } = useForm({ string: "" });
   const [letters, setLetters] = useState<TArrState[]>([]);
   const [loading, setLoading] = useState<Record<string, boolean>>({
     addItem: false,
@@ -28,7 +29,7 @@ export const StackPage: React.FC = () => {
 
   const addStackItem = async () => {
     setLoading({ ...loading, addItem: true });
-    stack.push(inputValues);
+    stack.push(values.string);
     letters.forEach((letter) => {
       letter.color = ElementStates.Default;
       letter.head = "";
@@ -42,7 +43,7 @@ export const StackPage: React.FC = () => {
       ...letters,
       { value: stack.peak()!, color: ElementStates.Default, head: "top" },
     ]);
-    setInputValues("");
+    setValues({ string: "" });
     setLoading({ ...loading, addItem: false });
   };
 
@@ -71,11 +72,10 @@ export const StackPage: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.stack}>
           <Input
+            name={"string"}
             placeholder="Введите текст"
-            value={inputValues}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setInputValues(e.target.value)
-            }
+            value={values.string}
+            onChange={(e) => handleChange(e)}
             maxLength={4}
             isLimitText
             disabled={loading.addItem}
@@ -85,7 +85,7 @@ export const StackPage: React.FC = () => {
             onClick={addStackItem}
             text="Добавить"
             isLoader={loading.addItem}
-            disabled={!inputValues || loading.deleteItem}
+            disabled={!values.string || loading.deleteItem}
           />
           <Button
             onClick={deleteStackItem}

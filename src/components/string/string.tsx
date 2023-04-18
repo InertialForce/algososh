@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -7,28 +7,28 @@ import { reverseString } from "./utils";
 import { TArrState } from "./string.types";
 
 import styles from "./string.module.css";
+import { useForm } from "../../hooks/use-form";
 
 export const StringComponent: React.FC = () => {
-  const [inputValues, setInputValues] = useState("");
+  const { values, handleChange, setValues } = useForm({ string: "" });
   const [letters, setLetters] = useState<TArrState[]>([]);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await reverseString(inputValues, setLetters);
+    await reverseString(values.string, setLetters);
     setLoading(false);
-    setInputValues("");
+    setValues({ string: "" });
   };
 
   return (
     <SolutionLayout title="Строка">
       <form className={styles.form} onSubmit={handleSubmit}>
         <Input
-          value={inputValues}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setInputValues(e.target.value)
-          }
+          name="string"
+          value={values.string}
+          onChange={(e) => handleChange(e)}
           maxLength={11}
           isLimitText
           disabled={loading}
@@ -37,7 +37,7 @@ export const StringComponent: React.FC = () => {
           type="submit"
           text="Развернуть"
           isLoader={loading}
-          disabled={!inputValues}
+          disabled={!values.string}
         />
       </form>
 

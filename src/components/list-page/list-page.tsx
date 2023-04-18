@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Circle } from "../ui/circle/circle";
 import { Input } from "../ui/input/input";
@@ -10,6 +10,7 @@ import { delay, randomArr } from "../../utils/utils";
 import { DELAY_IN_MS, SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 import styles from "./list-page.module.css";
+import { useForm } from "../../hooks/use-form";
 
 enum smallCircleAction {
   Add = "add",
@@ -32,8 +33,10 @@ const defaultArr: TListLetter[] = initialArr.map((item) => ({
 }));
 
 export const ListPage: React.FC = () => {
-  const [inputValues, setInputValues] = useState("");
-  const [inputIndex, setInputIndex] = useState("");
+  const { values, handleChange, setValues } = useForm({
+    string: "",
+    index: "",
+  });
   const [letters, setLetters] = useState<TListLetter[]>(defaultArr);
   const [loading, setLoading] = useState({
     addItemHead: false,
@@ -52,12 +55,12 @@ export const ListPage: React.FC = () => {
       allItems: true,
     });
 
-    list.prepend(inputValues);
+    list.prepend(values.string);
     letters[0] = {
       ...letters[0],
       action: smallCircleAction.Add,
       smallCircle: {
-        value: inputValues,
+        value: values.string,
       },
     };
     setLetters([...letters]);
@@ -70,11 +73,11 @@ export const ListPage: React.FC = () => {
         value: "",
       },
     };
-    letters.unshift({ value: inputValues, color: ElementStates.Modified });
+    letters.unshift({ value: values.string, color: ElementStates.Modified });
     setLetters([...letters]);
     await delay(DELAY_IN_MS);
 
-    setInputValues("");
+    setValues({ string: "", index: "" });
     letters[0] = {
       ...letters[0],
       color: ElementStates.Default,
@@ -95,12 +98,12 @@ export const ListPage: React.FC = () => {
       allItems: true,
     });
 
-    list.append(inputValues);
+    list.append(values.string);
     letters[letters.length - 1] = {
       ...letters[letters.length - 1],
       action: smallCircleAction.Add,
       smallCircle: {
-        value: inputValues,
+        value: values.string,
       },
     };
     setLetters([...letters]);
@@ -113,11 +116,11 @@ export const ListPage: React.FC = () => {
         value: "",
       },
     };
-    letters.push({ value: inputValues, color: ElementStates.Modified });
+    letters.push({ value: values.string, color: ElementStates.Modified });
     setLetters([...letters]);
     await delay(DELAY_IN_MS);
 
-    setInputValues("");
+    setValues({ string: "", index: "" });
     letters[letters.length - 1] = {
       ...letters[letters.length - 1],
       color: ElementStates.Default,
@@ -198,11 +201,11 @@ export const ListPage: React.FC = () => {
       allItems: true,
     });
 
-    for (let i = 0; i <= Number(inputIndex); i++) {
+    for (let i = 0; i <= Number(values.index); i++) {
       letters[i] = {
         ...letters[i],
         action: smallCircleAction.Add,
-        smallCircle: { value: inputValues },
+        smallCircle: { value: values.string },
       };
 
       letters[i - 1] = {
@@ -215,30 +218,29 @@ export const ListPage: React.FC = () => {
       await delay(SHORT_DELAY_IN_MS);
     }
 
-    letters[Number(inputIndex)] = {
-      ...letters[Number(inputIndex)],
+    letters[Number(values.index)] = {
+      ...letters[Number(values.index)],
       action: smallCircleAction.Default,
       smallCircle: { value: "" },
     };
     setLetters([...letters]);
 
     letters.map((letter) => (letter.color = ElementStates.Default));
-    list.insertAt(inputValues, Number(inputIndex));
-    letters.splice(Number(inputIndex), 0, {
-      value: inputValues,
+    list.insertAt(values.string, Number(values.index));
+    letters.splice(Number(values.index), 0, {
+      value: values.string,
       color: ElementStates.Modified,
     });
     setLetters([...letters]);
     await delay(SHORT_DELAY_IN_MS);
 
-    letters[Number(inputIndex)] = {
-      ...letters[Number(inputIndex)],
+    letters[Number(values.index)] = {
+      ...letters[Number(values.index)],
       color: ElementStates.Default,
     };
     setLetters([...letters]);
 
-    setInputIndex("");
-    setInputValues("");
+    setValues({ string: "", index: "" });
     setLoading({
       ...loading,
       addByIndex: false,
@@ -253,7 +255,7 @@ export const ListPage: React.FC = () => {
       allItems: true,
     });
 
-    for (let i = 0; i <= Number(inputIndex); i++) {
+    for (let i = 0; i <= Number(values.index); i++) {
       letters[i] = {
         ...letters[i],
         color: ElementStates.Changing,
@@ -262,26 +264,26 @@ export const ListPage: React.FC = () => {
       await delay(SHORT_DELAY_IN_MS);
     }
 
-    letters[Number(inputIndex)] = {
-      ...letters[Number(inputIndex)],
+    letters[Number(values.index)] = {
+      ...letters[Number(values.index)],
       color: ElementStates.Default,
       value: "",
-      smallCircle: { value: letters[Number(inputIndex)].value },
+      smallCircle: { value: letters[Number(values.index)].value },
     };
 
-    letters[Number(inputIndex)] = {
-      ...letters[Number(inputIndex)],
+    letters[Number(values.index)] = {
+      ...letters[Number(values.index)],
       action: smallCircleAction.Delete,
     };
     setLetters([...letters]);
     await delay(SHORT_DELAY_IN_MS);
 
     letters.map((letter) => (letter.color = ElementStates.Default));
-    list.deleteAt(Number(inputIndex));
-    letters.splice(Number(inputIndex), 1);
+    list.deleteAt(Number(values.index));
+    letters.splice(Number(values.index), 1);
     setLetters([...letters]);
 
-    setInputIndex("");
+    setValues({ string: "", index: "" });
     setLoading({
       ...loading,
       removeByIndex: false,
@@ -294,11 +296,10 @@ export const ListPage: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.interface}>
           <Input
+            name={"string"}
             placeholder="Введите значение"
-            value={inputValues}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setInputValues(e.target.value)
-            }
+            value={values.string}
+            onChange={(e) => handleChange(e)}
             maxLength={4}
             isLimitText
             disabled={loading.allItems}
@@ -308,14 +309,14 @@ export const ListPage: React.FC = () => {
             onClick={addListHead}
             text="Добавить в head"
             isLoader={loading.addItemHead}
-            disabled={!inputValues || loading.allItems}
+            disabled={!values.string || loading.allItems}
             extraClass={styles.button}
           />
           <Button
             onClick={addListTail}
             text="Добавить в tail"
             isLoader={loading.addItemTail}
-            disabled={!inputValues || loading.allItems}
+            disabled={!values.string || loading.allItems}
             extraClass={styles.button}
           />
           <Button
@@ -335,11 +336,10 @@ export const ListPage: React.FC = () => {
         </div>
         <div className={styles.interface}>
           <Input
+            name={"index"}
             placeholder="Введите индекс"
-            value={inputIndex}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setInputIndex(e.target.value)
-            }
+            value={values.index}
+            onChange={(e) => handleChange(e)}
             disabled={loading.allItems}
             extraClass={styles.input}
             type="number"
@@ -350,10 +350,10 @@ export const ListPage: React.FC = () => {
             linkedList="big"
             isLoader={loading.addByIndex}
             disabled={
-              !inputIndex ||
-              !inputValues ||
-              list.getSize() <= Number(inputIndex) ||
-              Number(inputIndex) < 0 ||
+              !values.index ||
+              !values.string ||
+              list.getSize() <= Number(values.index) ||
+              Number(values.index) < 0 ||
               loading.allItems
             }
           />
@@ -363,9 +363,9 @@ export const ListPage: React.FC = () => {
             linkedList="big"
             isLoader={loading.removeByIndex}
             disabled={
-              !inputIndex ||
-              list.getSize() - 1 < Number(inputIndex) ||
-              Number(inputIndex) < 0 ||
+              !values.index ||
+              list.getSize() - 1 < Number(values.index) ||
+              Number(values.index) < 0 ||
               loading.allItems
             }
           />

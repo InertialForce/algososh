@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
@@ -9,12 +9,13 @@ import { delay } from "../../utils/utils";
 import { SHORT_DELAY_IN_MS } from "../../constants/delays";
 
 import styles from "./queue-page.module.css";
+import { useForm } from "../../hooks/use-form";
 
 const QUEUE_SIZE = 7;
 const queue = new Queue<string>(QUEUE_SIZE);
 
 export const QueuePage: React.FC = () => {
-  const [inputValues, setInputValues] = useState("");
+  const { values, handleChange, setValues } = useForm({ string: "" });
   const [letters, setLetters] = useState(queue.getQueue());
   const [loading, setLoading] = useState<Record<string, boolean>>({
     addItem: false,
@@ -28,8 +29,8 @@ export const QueuePage: React.FC = () => {
 
   const addQueueItem = async () => {
     setLoading({ ...loading, addItem: true });
-    setInputValues("");
-    queue.enqueue(inputValues);
+    setValues({ string: "" });
+    queue.enqueue(values.string);
     setCurrentIndex(queue.getTail() - 1);
     await delay(SHORT_DELAY_IN_MS);
     setQueueState({
@@ -76,11 +77,10 @@ export const QueuePage: React.FC = () => {
       <div className={styles.container}>
         <div className={styles.stack}>
           <Input
+            name={"string"}
             placeholder="Введите текст"
-            value={inputValues}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setInputValues(e.target.value)
-            }
+            value={values.string}
+            onChange={(e) => handleChange(e)}
             maxLength={4}
             isLimitText
             disabled={
@@ -94,7 +94,7 @@ export const QueuePage: React.FC = () => {
             onClick={addQueueItem}
             text="Добавить"
             isLoader={loading.addItem}
-            disabled={!inputValues || loading.deleteItem}
+            disabled={!values.string || loading.deleteItem}
           />
           <Button
             onClick={deleteQueueItem}
