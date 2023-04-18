@@ -51,7 +51,7 @@ export const FibonacciPage: React.FC = () => {
         />
         <Button
           type="submit"
-          text="Развернуть"
+          text="Рассчитать"
           isLoader={loading}
           disabled={!inputValues || Number(inputValues) >= 20}
         />

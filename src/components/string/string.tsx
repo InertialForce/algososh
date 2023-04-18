@@ -3,49 +3,20 @@ import { SolutionLayout } from "../ui/solution-layout/solution-layout";
 import { Input } from "../ui/input/input";
 import { Button } from "../ui/button/button";
 import { Circle } from "../ui/circle/circle";
-import { ElementStates } from "../../types/element-states";
-import { DELAY_IN_MS } from "../../constants/delays";
-import { delay, swap } from "../../utils/utils";
+import { reverseString } from "./utils";
+import { TArrState } from "./string.types";
 
 import styles from "./string.module.css";
-
-type TArrState = {
-  value: string;
-  color: ElementStates;
-};
 
 export const StringComponent: React.FC = () => {
   const [inputValues, setInputValues] = useState("");
   const [letters, setLetters] = useState<TArrState[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const reverseString = async (str: string) => {
-    const arrString = str.split("").map((value) => ({
-      value,
-      color: ElementStates.Default,
-    }));
-    let start = 0;
-    let end = arrString.length - 1;
-    while (start <= end) {
-      if (start !== end) {
-        arrString[start].color = ElementStates.Changing;
-        arrString[end].color = ElementStates.Changing;
-        setLetters([...arrString]);
-        await delay(DELAY_IN_MS);
-      }
-      swap(arrString, start, end);
-      arrString[start].color = ElementStates.Modified;
-      arrString[end].color = ElementStates.Modified;
-      setLetters([...arrString]);
-      start++;
-      end--;
-    }
-  };
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    await reverseString(inputValues);
+    await reverseString(inputValues, setLetters);
     setLoading(false);
     setInputValues("");
   };
