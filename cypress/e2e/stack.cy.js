@@ -1,6 +1,12 @@
+import {
+  CIRCLE,
+  CIRCLE_CHANGING_COLOR,
+  CIRCLE_DEFAULT_COLOR
+} from "../constants/const";
+
 describe('Тестирование страницы "Стек"', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/stack');
+    cy.visit('stack');
   })
 
   it('Eсли в инпуте пусто, то кнопка добавления недоступна', function () {
@@ -15,10 +21,10 @@ describe('Тестирование страницы "Стек"', function () {
     cy.get('input').should('have.value', 6)
     cy.get('@button').click()
 
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(CIRCLE).as('circle')
 
-    cy.get('@circle').should('have.css', 'border', '4px solid rgb(210, 82, 225)')
-    cy.get('@circle').should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+    cy.get('@circle').should('have.css', 'border', CIRCLE_CHANGING_COLOR)
+    cy.get('@circle').should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
     cy.get('@circle').should('contain', 6)
 
     cy.get('button').contains('Удалить').click()
@@ -40,7 +46,7 @@ describe('Тестирование страницы "Стек"', function () {
     cy.get('input').should('have.value', 23)
     cy.get('@button').click()
 
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(CIRCLE).as('circle')
 
     cy.get('input').should('have.value', '')
     cy.get('button').contains('Очистить').click()

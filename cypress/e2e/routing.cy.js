@@ -1,6 +1,6 @@
 describe('Тестирование переходов по страницам', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:3000');
+    cy.visit('/');
   })
 
   it('Переход на страницу "Cтрока" по адресу http://localhost:3000/recursion', function () {

@@ -1,13 +1,21 @@
+import {
+  CIRCLE,
+  CIRCLE_CONTENT,
+  CIRCLE_DEFAULT_COLOR,
+  INPUT_INDEX,
+  INPUT_TEXT
+} from "../constants/const";
+
 /* eslint-disable cypress/no-unnecessary-waiting */
 describe('Тестирование страницы "Связный список"', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/list');
-    cy.get("[class*=circle_circle]").its("length").as("size");
+    cy.visit('list');
+    cy.get(CIRCLE).its("length").as("size");
   })
 
   it('Eсли в инпуте пусто, то кнопки добавления и удаления недоступны', function () {
-    cy.get("input[type='text']").should('have.value', '')
-    cy.get("input[type='number']").should('have.value', '')
+    cy.get(INPUT_TEXT).should('have.value', '')
+    cy.get(INPUT_INDEX).should('have.value', '')
     cy.contains('Добавить в head').should('be.disabled')
     cy.contains('Добавить в tail').should('be.disabled')
     cy.contains('Добавить по индексу').should('be.disabled')
@@ -15,19 +23,19 @@ describe('Тестирование страницы "Связный список
   });
 
   it('Дефолтная отрисовка списка', function () {
-    cy.get('[class*=circle_content]').as('circle-content')
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
+    cy.get(CIRCLE).as('circle')
 
     cy.get('@circle-content').first().contains('head')
-    cy.get('@circle').should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+    cy.get('@circle').should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
     cy.get('@circle-content').last().contains('tail')
   })
 
   it('Добавление элемента в head', function () {
     cy.get('button').contains('Добавить в head').as('button-head')
-    cy.get("input[type='text']").as('input')
-    cy.get('[class*=circle_content]').as('circle-content')
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(INPUT_TEXT).as('input')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
+    cy.get(CIRCLE).as('circle')
 
     cy.get("@input").type('23')
     cy.get("@input").should('have.value', '23')
@@ -40,9 +48,9 @@ describe('Тестирование страницы "Связный список
 
   it('Добавление элемента в tail', function () {
     cy.get('button').contains('Добавить в tail').as('button-tail')
-    cy.get("input[type='text']").as('input')
-    cy.get('[class*=circle_content]').as('circle-content')
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(INPUT_TEXT).as('input')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
+    cy.get(CIRCLE).as('circle')
 
     cy.get("@input").type('11')
     cy.get("@input").should('have.value', '11')
@@ -55,10 +63,10 @@ describe('Тестирование страницы "Связный список
 
   it('Добавление элемента по индексу', function () {
     cy.get('button').contains('Добавить по индексу').as('button-index')
-    cy.get("input[type='text']").as('input')
-    cy.get("input[type='number']").as('input-index')
-    cy.get('[class*=circle_content]').as('circle-content')
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(INPUT_TEXT).as('input')
+    cy.get(INPUT_INDEX).as('input-index')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
+    cy.get(CIRCLE).as('circle')
 
     cy.get("@input").type('33')
     cy.get("@input").should('have.value', '33')
@@ -72,8 +80,8 @@ describe('Тестирование страницы "Связный список
 
   it('Удаление элемента из head', function () {
     cy.get('button').contains('Удалить из head').as('button-del-head')
-    cy.get('[class*=circle_content]').as('circle-content')
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
+    cy.get(CIRCLE).as('circle')
 
     cy.get('@circle').should('have.length', this.size)
     cy.get('@circle-content').first().contains('head')
@@ -85,8 +93,8 @@ describe('Тестирование страницы "Связный список
 
   it('Удаление элемента из tail', function () {
     cy.get('button').contains('Удалить из tail').as('button-del-tail')
-    cy.get('[class*=circle_content]').as('circle-content')
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
+    cy.get(CIRCLE).as('circle')
 
     cy.get('@circle').should('have.length', this.size)
     cy.get('@circle-content').last().contains('tail')
@@ -98,9 +106,9 @@ describe('Тестирование страницы "Связный список
 
   it('Удаление элемента по индексу', function () {
     cy.get('button').contains('Удалить по индексу').as('button-del-index')
-    cy.get("input[type='number']").as('input-index')
-    cy.get('[class*=circle_content]').as('circle-content')
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(INPUT_INDEX).as('input-index')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
+    cy.get(CIRCLE).as('circle')
 
     cy.get('@circle').should('have.length', this.size)
     cy.get('@circle-content').first().contains('head')

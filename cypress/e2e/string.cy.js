@@ -1,6 +1,11 @@
+import {
+  CIRCLE,
+  CIRCLE_MODIFIED_COLOR
+} from "../constants/const";
+
 describe('Тестирование страницы "Строка"', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/recursion');
+    cy.visit('recursion');
   })
 
   it('Eсли в инпуте пусто, то кнопка добавления недоступна', function () {
@@ -13,7 +18,7 @@ describe('Тестирование страницы "Строка"', function ()
     cy.get('input').should('have.value', 'тест')
     cy.get('button').contains('Развернуть').click()
 
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(CIRCLE).as('circle')
 
     cy.get('@circle').should('have.length', 4).each(($circle, index) => {
       switch (index) {
@@ -37,10 +42,10 @@ describe('Тестирование страницы "Строка"', function ()
     cy.get('@circle').each(($circle, index) => {
       switch (index) {
         case 0:
-          cy.wrap($circle).should('have.css', 'border', '4px solid rgb(127, 224, 81)').contains('т');
+          cy.wrap($circle).should('have.css', 'border', CIRCLE_MODIFIED_COLOR).contains('т');
           break;
         case 3:
-          cy.wrap($circle).should('have.css', 'border', '4px solid rgb(127, 224, 81)').contains('т');
+          cy.wrap($circle).should('have.css', 'border', CIRCLE_MODIFIED_COLOR).contains('т');
           break;
         default:
           return;
@@ -50,10 +55,10 @@ describe('Тестирование страницы "Строка"', function ()
     cy.get('@circle').each(($circle, index) => {
       switch (index) {
         case 1:
-          cy.wrap($circle).should('have.css', 'border', '4px solid rgb(127, 224, 81)').contains('с');
+          cy.wrap($circle).should('have.css', 'border', CIRCLE_MODIFIED_COLOR).contains('с');
           break;
         case 2:
-          cy.wrap($circle).should('have.css', 'border', '4px solid rgb(127, 224, 81)').contains('е');
+          cy.wrap($circle).should('have.css', 'border', CIRCLE_MODIFIED_COLOR).contains('е');
           break;
         default:
           return;

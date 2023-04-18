@@ -1,6 +1,10 @@
+import {
+  CIRCLE
+} from "../constants/const";
+
 describe('Тестирование страницы "Последовательность Фибоначчи"', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/fibonacci');
+    cy.visit('fibonacci');
   })
 
   it('Eсли в инпуте пусто, то кнопка добавления недоступна', function () {
@@ -13,7 +17,7 @@ describe('Тестирование страницы "Последователь�
     cy.get('input').should('have.value', 6)
     cy.get('button').contains('Рассчитать').click()
 
-    cy.get('[class*=circle_circle]').as('circle')
+    cy.get(CIRCLE).as('circle')
 
     cy.get('@circle').should('have.length', 7).each(($circle, index) => {
       switch (index) {

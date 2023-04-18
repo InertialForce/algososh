@@ -1,6 +1,13 @@
+import {
+  CIRCLE,
+  CIRCLE_CHANGING_COLOR,
+  CIRCLE_CONTENT,
+  CIRCLE_DEFAULT_COLOR
+} from "../constants/const";
+
 describe('Тестирование страницы "Очередь"', function () {
   beforeEach(() => {
-    cy.visit('http://localhost:3000/queue');
+    cy.visit('queue');
   })
 
   it('Eсли в инпуте пусто, то кнопка добавления недоступна', function () {
@@ -15,17 +22,17 @@ describe('Тестирование страницы "Очередь"', function 
     cy.get('input').should('have.value', 't1')
     cy.get('@button').click();
 
-    cy.get('[class*=circle_circle]').as('circle')
-    cy.get('[class*=circle_content]').as('circle-content')
+    cy.get(CIRCLE).as('circle')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
 
     cy.get('@circle-content').should('have.length', 7).each(($circle_content, index) => {
       switch (index) {
         case 0:
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(210, 82, 225)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_CHANGING_COLOR)
           cy.wrap($circle_content).contains('t1');
           cy.wrap($circle_content).contains('head');
           cy.wrap($circle_content).contains('tail');
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
@@ -41,13 +48,13 @@ describe('Тестирование страницы "Очередь"', function 
         case 0:
           cy.wrap($circle_content).contains('t1');
           cy.wrap($circle_content).contains('head');
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 1:
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(210, 82, 225)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_CHANGING_COLOR)
           cy.wrap($circle_content).contains('t2');
           cy.wrap($circle_content).contains('tail');
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
@@ -63,17 +70,17 @@ describe('Тестирование страницы "Очередь"', function 
         case 0:
           cy.wrap($circle_content).contains('t1');
           cy.wrap($circle_content).contains('head');
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 1:
           cy.wrap($circle_content).contains('t2');
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 2:
-          cy.get('@circle').eq(2).should('have.css', 'border', '4px solid rgb(210, 82, 225)')
+          cy.get('@circle').eq(2).should('have.css', 'border', CIRCLE_CHANGING_COLOR)
           cy.wrap($circle_content).contains('t3');
           cy.wrap($circle_content).contains('tail');
-          cy.get('@circle').eq(2).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(2).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
@@ -84,19 +91,19 @@ describe('Тестирование страницы "Очередь"', function 
     cy.get('@circle-content').should('have.length', 7).each(($circle_content, index) => {
       switch (index) {
         case 0:
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(210, 82, 225)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_CHANGING_COLOR)
           cy.get('@circle').eq(0).should('have.text', '')
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 1:
           cy.wrap($circle_content).contains('t2');
           cy.wrap($circle_content).contains('head');
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 2:
           cy.wrap($circle_content).contains('t3');
           cy.wrap($circle_content).contains('tail');
-          cy.get('@circle').eq(2).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(2).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
@@ -108,18 +115,18 @@ describe('Тестирование страницы "Очередь"', function 
       switch (index) {
         case 0:
           cy.get('@circle').eq(0).should('have.text', '')
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 1:
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(210, 82, 225)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_CHANGING_COLOR)
           cy.wrap($circle_content).contains('t2');
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 2:
           cy.wrap($circle_content).contains('t3');
           cy.wrap($circle_content).contains('head');
           cy.wrap($circle_content).contains('tail');
-          cy.get('@circle').eq(2).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(2).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
@@ -134,17 +141,17 @@ describe('Тестирование страницы "Очередь"', function 
     cy.get('input').should('have.value', 't1')
     cy.get('@button').click();
 
-    cy.get('[class*=circle_circle]').as('circle')
-    cy.get('[class*=circle_content]').as('circle-content')
+    cy.get(CIRCLE).as('circle')
+    cy.get(CIRCLE_CONTENT).as('circle-content')
 
     cy.get('@circle-content').should('have.length', 7).each(($circle_content, index) => {
       switch (index) {
         case 0:
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(210, 82, 225)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_CHANGING_COLOR)
           cy.wrap($circle_content).contains('t1');
           cy.wrap($circle_content).contains('head');
           cy.wrap($circle_content).contains('tail');
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
@@ -160,13 +167,13 @@ describe('Тестирование страницы "Очередь"', function 
         case 0:
           cy.wrap($circle_content).contains('t1');
           cy.wrap($circle_content).contains('head');
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 1:
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(210, 82, 225)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_CHANGING_COLOR)
           cy.wrap($circle_content).contains('t2');
           cy.wrap($circle_content).contains('tail');
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
@@ -182,17 +189,17 @@ describe('Тестирование страницы "Очередь"', function 
         case 0:
           cy.wrap($circle_content).contains('t1');
           cy.wrap($circle_content).contains('head');
-          cy.get('@circle').eq(0).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(0).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 1:
           cy.wrap($circle_content).contains('t2');
-          cy.get('@circle').eq(1).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(1).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 2:
-          cy.get('@circle').eq(2).should('have.css', 'border', '4px solid rgb(210, 82, 225)')
+          cy.get('@circle').eq(2).should('have.css', 'border', CIRCLE_CHANGING_COLOR)
           cy.wrap($circle_content).contains('t3');
           cy.wrap($circle_content).contains('tail');
-          cy.get('@circle').eq(2).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.get('@circle').eq(2).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
@@ -208,19 +215,19 @@ describe('Тестирование страницы "Очередь"', function 
           cy.get('@head').should('have.text', '')
           cy.get('@tail').should('have.text', '')
           cy.wrap($circle).should('have.text', '')
-          cy.wrap($circle).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.wrap($circle).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 1:
           cy.get('@head').should('have.text', '')
           cy.get('@tail').should('have.text', '')
           cy.wrap($circle).should('have.text', '')
-          cy.wrap($circle).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.wrap($circle).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         case 2:
           cy.get('@head').should('have.text', '')
           cy.get('@tail').should('have.text', '')
           cy.wrap($circle).should('have.text', '')
-          cy.wrap($circle).should('have.css', 'border', '4px solid rgb(0, 50, 255)')
+          cy.wrap($circle).should('have.css', 'border', CIRCLE_DEFAULT_COLOR)
           break;
         default:
           return;
